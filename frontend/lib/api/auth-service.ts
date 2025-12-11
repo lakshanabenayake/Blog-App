@@ -1,9 +1,9 @@
-import axiosClient from "./axios-client"
+import api from "./axios-client"
 import type { AuthResponse, User } from "@/lib/types"
 
 export const authService = {
   async login(email: string, password: string): Promise<AuthResponse> {
-    const response = await axiosClient.post<AuthResponse>("/auth/login", {
+    const response = await api.post<AuthResponse>("/auth/login", {
       email,
       password,
     })
@@ -17,7 +17,7 @@ export const authService = {
   },
 
   async register(name: string, email: string, password: string): Promise<{ message: string }> {
-    const response = await axiosClient.post<{ message: string }>("/auth/register", {
+    const response = await api.post<{ message: string }>("/auth/register", {
       name,
       email,
       password,
@@ -27,7 +27,7 @@ export const authService = {
 
   async logout(): Promise<void> {
     try {
-      await axiosClient.post("/auth/logout")
+      await api.post("/auth/logout")
     } finally {
       localStorage.removeItem("auth_token")
       localStorage.removeItem("refresh_token")
@@ -37,7 +37,7 @@ export const authService = {
 
   async getCurrentUser(): Promise<User | null> {
     try {
-      const response = await axiosClient.get<User>("/auth/me")
+      const response = await api.get<User>("/auth/me")
       return response.data
     } catch {
       return null

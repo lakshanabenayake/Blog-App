@@ -2,7 +2,7 @@ import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
 
-export const axiosClient = axios.create({
+export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
@@ -11,7 +11,7 @@ export const axiosClient = axios.create({
 })
 
 // Request interceptor to add auth token
-axiosClient.interceptors.request.use(
+api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("auth_token")
@@ -25,7 +25,7 @@ axiosClient.interceptors.request.use(
 )
 
 // Response interceptor to handle errors and token refresh
-axiosClient.interceptors.response.use(
+api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
@@ -40,4 +40,4 @@ axiosClient.interceptors.response.use(
   },
 )
 
-export default axiosClient
+export default api;

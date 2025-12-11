@@ -1,6 +1,5 @@
+namespace backend.models;
 
-
-using backend.models;
 
 public class Post
 {
@@ -12,7 +11,7 @@ public class Post
     public int CategoryId { get; set; }
     public Category Category { get; set; } = null!;
     public string? FeaturedImageUrl { get; set; }
-    public List<Tags?> Tags { get; set; } = new List<Tags?>();  
+    public List<Tags> Tags { get; set; } = new List<Tags>();
     public string Status { get; set; } = "Draft";
     public DateTime? PublishedAt { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
