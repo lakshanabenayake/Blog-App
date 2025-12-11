@@ -46,7 +46,7 @@ public class PostsController : ControllerBase
         return Ok(posts);
     }
 
-   
+
     [HttpPost("/posts")]
     [Authorize(Roles = "User, Admin")]
     public async Task<IActionResult> CreatePost([FromBody] CreatePostDTO dto)
@@ -92,7 +92,7 @@ public class PostsController : ControllerBase
         return Ok(new { message = "Post deleted successfully" });
     }
 
-     // Admin endpoints
+    // Admin endpoints
     [HttpGet("admin/posts")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllPosts([FromQuery] PostFiltersDTO filters)
@@ -114,6 +114,21 @@ public class PostsController : ControllerBase
             return NotFound(new { message = "Post not found" });
 
         return Ok(post);
+    }
+
+    // User endpoints - for authenticated users to manage their own posts
+    [HttpGet("user/posts")]
+    [Authorize(Roles = "User, Admin")]
+    public async Task<IActionResult> GetUserPosts([FromQuery] PostFiltersDTO filters)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (userIdClaim == null)
+            return Unauthorized();
+
+        var userId = Guid.Parse(userIdClaim);
+        var result = await _postService.GetUserPostsAsync(userId, filters);
+        return Ok(result);
     }
 
 }

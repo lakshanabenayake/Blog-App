@@ -100,6 +100,37 @@ public class PostRepository : IPostRepository
         return (posts, total);
     }
 
+    public async Task<(List<Post> posts, int total)> GetByUserIdAsync(Guid userId, PostFiltersDTO filters)
+    {
+        var query = _context.Posts
+            .Include(p => p.User)
+            .Include(p => p.Category)
+            .Include(p => p.Tags)
+            .Where(p => p.UserId == userId)
+            .AsQueryable();
+
+        // Apply filters
+        if (!string.IsNullOrEmpty(filters.Search))
+        {
+            query = query.Where(p => p.Title.Contains(filters.Search) || p.Content.Contains(filters.Search));
+        }
+
+        if (!string.IsNullOrEmpty(filters.Status))
+        {
+            query = query.Where(p => p.Status == filters.Status);
+        }
+
+        var total = await query.CountAsync();
+
+        var posts = await query
+            .OrderByDescending(p => p.CreatedAt)
+            .Skip((filters.Page - 1) * filters.PageSize)
+            .Take(filters.PageSize)
+            .ToListAsync();
+
+        return (posts, total);
+    }
+
     public async Task<List<Post>> GetRelatedAsync(Guid postId, int categoryId, int limit)
     {
         return await _context.Posts
