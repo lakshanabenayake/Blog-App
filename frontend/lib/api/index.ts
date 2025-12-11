@@ -1,0 +1,5 @@
+export { axiosClient } from "./axios-client"
+export { authService } from "./auth-service"
+export { postsService } from "./posts-service"
+export { categoriesService } from "./categories-service"
+export { dashboardService } from "./dashboard-service"
