@@ -25,8 +25,13 @@ export default function LoginPage() {
     setError(null)
 
     try {
-      await login(email, password)
-      router.push("/admin")
+      const response = await login(email, password)
+      // Redirect based on user role
+      if (response?.role === "admin") {
+        router.push("/admin")
+      } else {
+        router.push("/blog")
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Invalid credentials")
     } finally {

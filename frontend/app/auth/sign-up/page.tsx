@@ -39,8 +39,13 @@ export default function SignUpPage() {
     }
 
     try {
-      await register(name, email, password)
-      router.push("/auth/sign-up-success") //change to relative page
+      const response = await register(name, email, password)
+      // Redirect based on user role
+      if (response?.role === "admin") {
+        router.push("/admin")
+      } else {
+        router.push("/blog")
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred")
     } finally {
