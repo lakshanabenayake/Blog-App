@@ -23,7 +23,7 @@ public class PostService
             Total = total,
             Page = filters.Page,
             PageSize = filters.PageSize,
-            TotalPages = (int)Math.Ceiling(total/ (double)filters.PageSize)
+            TotalPages = (int)Math.Ceiling(total  / (double)filters.PageSize)
         };
     }
 
@@ -122,6 +122,20 @@ public class PostService
 
         await _postRepository.DeleteAsync(id);
         return true;
+    }
+
+    public async Task<PaginatedResponseDTO<PostResponseDTO>> GetUserPostsAsync(Guid userId, PostFiltersDTO filters)
+    {
+        var (posts, total) = await _postRepository.GetByUserIdAsync(userId, filters);
+
+        return new PaginatedResponseDTO<PostResponseDTO>
+        {
+            Data = posts.Select(MapToResponseDTO).ToList(),
+            Total = total,
+            Page = filters.Page,
+            PageSize = filters.PageSize,
+            TotalPages = (int)Math.Ceiling(total / (double)filters.PageSize)
+        };
     }
 
     private PostResponseDTO MapToResponseDTO(Post post)
