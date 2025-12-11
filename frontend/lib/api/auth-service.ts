@@ -16,13 +16,19 @@ export const authService = {
     return data
   },
 
-  async register(name: string, email: string, password: string): Promise<{ message: string }> {
-    const response = await api.post<{ message: string }>("/auth/register", {
-      name,
+  async register(username: string, email: string, password: string): Promise<AuthResponse> {
+    const response = await api.post<AuthResponse>("/auth/register", {
+      username,
       email,
       password,
     })
-    return response.data
+    const data = response.data
+
+    localStorage.setItem("auth_token", data.token)
+    localStorage.setItem("refresh_token", data.refreshToken)
+    localStorage.setItem("user", JSON.stringify(data.user))
+
+    return data
   },
 
   async logout(): Promise<void> {
