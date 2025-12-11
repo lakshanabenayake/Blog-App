@@ -41,7 +41,7 @@ function PostsGrid({ posts, isLoading }: { posts: Post[]; isLoading: boolean }) 
   )
 }
 
-function HomeContent() {
+function BlogContent() {
   const searchParams = useSearchParams()
   const [posts, setPosts] = useState<Post[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -76,7 +76,7 @@ function HomeContent() {
     <div className="container mx-auto px-4 py-8">
       <section className="mb-12 text-center">
         <h1 className="mb-4 text-4xl font-bold tracking-tight text-foreground md:text-5xl text-balance">
-          Welcome to BlogSpace
+          All Blog Posts
         </h1>
         <p className="mx-auto max-w-2xl text-lg text-muted-foreground text-pretty">
           Discover stories, insights, and ideas from writers around the world
@@ -97,7 +97,7 @@ function HomeContent() {
   )
 }
 
-export default function HomePage() {
+export default function BlogPage() {
   return (
     <Suspense
       fallback={
@@ -110,7 +110,7 @@ export default function HomePage() {
         </div>
       }
     >
-      <HomeContent />
+      <BlogContent />
     </Suspense>
   )
 }
