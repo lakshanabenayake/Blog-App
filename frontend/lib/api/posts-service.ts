@@ -64,4 +64,38 @@ export const postsService = {
   async deletePost(id: string): Promise<void> {
     await api.delete(`/admin/posts/${id}`)
   },
+
+  // User endpoints - for authenticated users to manage their own posts
+  async getUserPosts(filters?: PostFilters): Promise<PaginatedResponse<Post>> {
+    const params = new URLSearchParams()
+    if (filters?.search) params.append("search", filters.search)
+    if (filters?.status) params.append("status", filters.status)
+    if (filters?.page) params.append("page", String(filters.page))
+    if (filters?.pageSize) params.append("pageSize", String(filters.pageSize))
+
+    const response = await api.get<PaginatedResponse<Post>>(`/user/posts?${params}`)
+    return response.data
+  },
+
+  async createUserPost(post: {
+    title: string
+    content: string
+    excerpt?: string
+    categoryId: string
+    tags?: string[]
+    featuredImageUrl?: string
+    status?: "draft" | "published"
+  }): Promise<Post> {
+    const response = await api.post<Post>("/posts", post)
+    return response.data
+  },
+
+  async updateUserPost(id: string, post: Partial<Post>): Promise<Post> {
+    const response = await api.put<Post>(`/posts/${id}`, post)
+    return response.data
+  },
+
+  async deleteUserPost(id: string): Promise<void> {
+    await api.delete(`/posts/${id}`)
+  },
 }
