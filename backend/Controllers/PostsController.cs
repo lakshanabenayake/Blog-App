@@ -47,7 +47,7 @@ public class PostsController : ControllerBase
     }
 
 
-    [HttpPost("/posts")]
+    [HttpPost("posts")]
     [Authorize(Roles = "User, Admin")]
     public async Task<IActionResult> CreatePost([FromBody] CreatePostDTO dto)
     {
@@ -62,7 +62,7 @@ public class PostsController : ControllerBase
         return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
     }
 
-    [HttpPut("/posts/{id}")]
+    [HttpPut("posts/{id}")]
     [Authorize(Roles = "Admin, User")]
     public async Task<IActionResult> UpdatePost(string id, [FromBody] UpdatePostDTO dto)
     {
@@ -77,7 +77,7 @@ public class PostsController : ControllerBase
         return Ok(post);
     }
 
-    [HttpDelete("/posts/{id}")]
+    [HttpDelete("posts/{id}")]
     [Authorize(Roles = "Admin, User")]
     public async Task<IActionResult> DeletePost(string id)
     {

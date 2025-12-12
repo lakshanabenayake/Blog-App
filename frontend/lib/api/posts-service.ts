@@ -47,22 +47,22 @@ export const postsService = {
   },
 
   async getPostById(id: string): Promise<Post> {
-    const response = await api.get<Post>(`/admin/posts/${id}`)
+    const response = await api.get<Post>(`/posts/${id}`)
     return response.data
   },
 
   async createPost(post: Partial<Post>): Promise<Post> {
-    const response = await api.post<Post>("/admin/posts", post)
+    const response = await api.post<Post>("/posts", post)
     return response.data
   },
 
   async updatePost(id: string, post: Partial<Post>): Promise<Post> {
-    const response = await api.put<Post>(`/admin/posts/${id}`, post)
+    const response = await api.put<Post>(`/posts/${id}`, post)
     return response.data
   },
 
   async deletePost(id: string): Promise<void> {
-    await api.delete(`/admin/posts/${id}`)
+    await api.delete(`/posts/${id}`)
   },
 
   // User endpoints - for authenticated users to manage their own posts

@@ -61,7 +61,6 @@ public class AuthController : ControllerBase
     [Authorize]
     public IActionResult Logout()
     {
-        // Client handles token removal
         return Ok(new { message = "Logged out successfully" });
     }
 }
