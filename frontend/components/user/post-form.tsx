@@ -46,7 +46,7 @@ export default function PostForm({ post, isEdit = false }: PostFormProps) {
     categoryId: post?.categoryId?.toString() || "",
     tags: post?.tags?.join(", ") || "",
     featuredImageUrl: post?.featuredImage || "",
-    status: post?.status || "draft",
+    status: "draft",
   })
 
   useEffect(() => {
@@ -220,7 +220,7 @@ export default function PostForm({ post, isEdit = false }: PostFormProps) {
                 </Select>
               </div>
 
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label htmlFor="status">Status *</Label>
                 <Select
                   value={formData.status}
@@ -234,7 +234,7 @@ export default function PostForm({ post, isEdit = false }: PostFormProps) {
                     <SelectItem value="published">Published</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
             </div>
 
             <div className="space-y-2">
