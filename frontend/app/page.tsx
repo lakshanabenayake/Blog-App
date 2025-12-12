@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, BookOpen, Layers, Users, Pencil } from "lucide-react"
+import { ArrowRight, BookOpen, Layers, Users, Pencil, PenSquare } from "lucide-react"
 import { postsService } from "@/lib/api"
 import type { Post } from "@/lib/types"
 import { format } from "date-fns"
@@ -33,15 +33,19 @@ export default function LandingPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-
+      {/* <PenSquare className="absolute left-4 top-4 h-12 w-12 text-primary" /> */}
       {/* Hero Section */}
       <section className="relative flex flex-1 items-center justify-center overflow-hidden bg-background px-4 py-24 lg:py-32">
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] " />
         <div className="container mx-auto max-w-5xl text-center">
-          <Badge variant="secondary" className="mb-6">
-            Modern Blog Platform
-          </Badge>
-          <h1 className="mb-6 text-balance font-sans text-5xl font-bold leading-tight tracking-tight lg:text-7xl">
+          <div className="flex items-center justify-center gap-3 font-sans text-5xl font-bold leading-tight tracking-tight lg:text-7xl mb-7 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 w-fit px-8 py-4 rounded-2xl mx-auto border-1 border-black shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+            <PenSquare className="text-primary-500 drop-shadow-md w-12 h-12 lg:w-16 lg:h-16" strokeWidth={2.5} />
+            <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 bg-clip-text text-primary drop-shadow-sm">
+              BlogSpace
+            </span>
+          </div>
+
+          <h1 className="mt-6 mb-6 text-balance font-sans text-5xl font-bold leading-tight tracking-tight lg:text-7xl">
             Your Stories,
             <br />
             <span className="text-muted-foreground">Your Voice</span>
@@ -78,7 +82,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
             {/* Feature 1 */}
             <Card className="group relative overflow-hidden border-border p-8 transition-all hover:border-primary/50 hover:shadow-lg">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
@@ -92,7 +96,7 @@ export default function LandingPage() {
             </Card>
 
             {/* Feature 2 */}
-            <Card className="group relative overflow-hidden border-border p-8 transition-all hover:border-primary/50 hover:shadow-lg">
+            {/* <Card className="group relative overflow-hidden border-border p-8 transition-all hover:border-primary/50 hover:shadow-lg">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                 <Layers className="h-6 w-6 text-primary" />
               </div>
@@ -101,7 +105,7 @@ export default function LandingPage() {
                 Manage all your content from a clean admin dashboard. Organize posts, categories, and track performance
                 in one place.
               </p>
-            </Card>
+            </Card> */}
 
             {/* Feature 3 */}
             <Card className="group relative overflow-hidden border-border p-8 transition-all hover:border-primary/50 hover:shadow-lg">
