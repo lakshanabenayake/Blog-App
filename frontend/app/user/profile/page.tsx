@@ -105,11 +105,6 @@ export default function ProfilePage() {
               <p className="text-xs text-muted-foreground">Email cannot be changed</p>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
-              <Input id="role" value={authUser.role} disabled className="bg-muted" />
-            </div>
-
             <Button type="submit" disabled={isLoading || username === authUser.name}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Save Changes
