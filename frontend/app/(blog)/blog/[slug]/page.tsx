@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { RelatedPosts } from "@/components/blog/related-posts"
+import { AuthorBox } from "@/components/blog/author-box"
 import type { Post } from "@/lib/types"
 
 interface PostPageProps {
@@ -120,6 +121,8 @@ export default function PostPage({ params }: PostPageProps) {
           />
         </div>
       )}
+
+      <AuthorBox author={post.user} publishedAt={post.publishedAt} />
 
       <div className="prose prose-gray mx-auto max-w-3xl dark:prose-invert">
         {post.content.split("\n").map((paragraph, index) => (
