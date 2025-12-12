@@ -29,7 +29,7 @@ export interface User {
   id: string
   email: string
   name: string
-  role: "admin" | "user"
+  role: "Admin" | "user"
 }
 
 export interface AuthResponse {

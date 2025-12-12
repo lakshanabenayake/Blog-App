@@ -26,8 +26,9 @@ export default function LoginPage() {
 
     try {
       const response = await login(email, password)
+      console.log(response.role);
       // Redirect based on user role
-      if (response?.role === "admin") {
+      if (response?.role === "Admin") {
         router.push("/admin")
       } else {
         router.push("/blog")

@@ -46,7 +46,7 @@ export function BlogHeader() {
 
           {isAuthenticated ? (
             <>
-              {user?.role === "admin" ? (
+              {user?.role === "Admin" ? (
                 <Button asChild size="sm" variant="outline">
                   <Link href="/admin">Admin Dashboard</Link>
                 </Button>
