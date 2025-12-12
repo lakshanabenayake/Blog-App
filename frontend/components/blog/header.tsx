@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { PenSquare, LogOut, User, FileText } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
@@ -16,7 +16,12 @@ import {
 
 export function BlogHeader() {
   const pathname = usePathname()
+  const router = useRouter()
   const { user, isAuthenticated, logout } = useAuth()
+  
+  const handleClick = () => {
+    router.push("/user/profile")
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
@@ -63,7 +68,9 @@ export function BlogHeader() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuLabel>
+                    <button onClick={e=> handleClick()}>My account</button>
+                    </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {user?.role === "user" && (
                     <>
