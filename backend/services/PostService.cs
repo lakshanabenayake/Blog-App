@@ -233,6 +233,14 @@ public class PostService
             Tags = post.Tags?.Select(t => t.Name).ToList() ?? new List<string>(),
             Status = post.Status,
             UserId = post.UserId,
+            User = post.User != null ? new UserDTO
+            {
+                Id = post.User.Id,
+                Username = post.User.Username,
+                Email = post.User.Email,
+                Role = post.User.Role,
+                ProfilePictureUrl = post.User.ProfilePictureUrl
+            } : null,
             PublishedAt = post.PublishedAt,
             CreatedAt = post.CreatedAt,
             UpdatedAt = post.UpdatedAt
