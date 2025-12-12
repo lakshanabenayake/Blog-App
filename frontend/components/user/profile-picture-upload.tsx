@@ -54,8 +54,8 @@ export function ProfilePictureUpload({ user, onUpdate }: ProfilePictureUploadPro
 
       // If file is selected, upload to Cloudinary
       if (selectedFile) {
-        const uploadedUrl = await imageService.uploadImage(selectedFile)
-        finalImageUrl = uploadedUrl
+        const { url } = await imageService.upload(selectedFile)
+        finalImageUrl = url
       }
 
       // Update user profile with new image URL
