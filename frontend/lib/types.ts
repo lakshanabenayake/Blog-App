@@ -17,7 +17,7 @@ export interface Post {
   featuredImage: string | null
   categoryId: string | null
   tags: string[]
-  status: "draft" | "published"
+  status: "draft" | "Published"
   userId: string
   publishedAt: string | null
   createdAt: string

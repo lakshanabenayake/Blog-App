@@ -3,7 +3,7 @@ using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Options;
 
-namespace API.Services;
+namespace backend.services;
 
 public class ImageService
 {

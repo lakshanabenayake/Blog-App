@@ -23,7 +23,7 @@ builder.Services.AddScoped<IPostRepository, PostRepository>();
 // Add Services
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<PostService>();
-builder.Services.AddScoped<API.Services.ImageService>();
+builder.Services.AddScoped<ImageService>();
 
 // Add Authentication
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key missing");
