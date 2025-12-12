@@ -9,6 +9,7 @@ import { CategoryFilter } from "@/components/blog/category-filter"
 import { PostCard } from "@/components/blog/post-card"
 import { PostCardSkeleton } from "@/components/blog/post-card-skeleton"
 import { EmptyState } from "@/components/blog/empty-state"
+import { Pagination } from "@/components/blog/pagination"
 import type { Category, Post } from "@/lib/types"
 
 function PostsGrid({ posts, isLoading }: { posts: Post[]; isLoading: boolean }) {
@@ -47,26 +48,39 @@ function BlogContent() {
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [pagination, setPagination] = useState({ total: 0, page: 1, pageSize: 12, totalPages: 0 })
 
   const query = searchParams.get("q") || undefined
   const category = searchParams.get("category") || undefined
+  const page = parseInt(searchParams.get("page") || "1", 10)
 
   const fetchData = useCallback(async () => {
     setIsLoading(true)
     setError(null)
     try {
       const [postsResponse, categoriesData] = await Promise.all([
-        postsService.getPublishedPosts({ search: query, categorySlug: category }),
+        postsService.getPublishedPosts({ 
+          search: query, 
+          categorySlug: category,
+          page,
+          pageSize: 12
+        }),
         categoriesService.getAll(),
       ])
       setPosts(postsResponse.data)
       setCategories(categoriesData)
+      setPagination({
+        total: postsResponse.total,
+        page: postsResponse.page,
+        pageSize: postsResponse.pageSize,
+        totalPages: postsResponse.totalPages
+      })
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load posts")
     } finally {
       setIsLoading(false)
     }
-  }, [query, category])
+  }, [query, category, page])
 
   useEffect(() => {
     fetchData()
@@ -91,7 +105,16 @@ function BlogContent() {
       {error ? (
         <EmptyState title="Error loading posts" description={error} />
       ) : (
-        <PostsGrid posts={posts} isLoading={isLoading} />
+        <>
+          <PostsGrid posts={posts} isLoading={isLoading} />
+          {!isLoading && posts.length > 0 && (
+            <Pagination 
+              currentPage={pagination.page} 
+              totalPages={pagination.totalPages}
+              total={pagination.total}
+            />
+          )}
+        </>
       )}
     </div>
   )

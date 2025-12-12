@@ -44,7 +44,11 @@ public class PostRepository : IPostRepository
         // Apply filters
         if (!string.IsNullOrEmpty(filters.Search))
         {
-            query = query.Where(p => p.Title.Contains(filters.Search) || p.Content.Contains(filters.Search));
+            var searchLower = filters.Search.ToLower();
+            query = query.Where(p =>
+                p.Title.ToLower().Contains(searchLower) ||
+                p.Content.ToLower().Contains(searchLower) ||
+                p.Tags.Any(t => t.Name.ToLower().Contains(searchLower)));
         }
 
         if (filters.CategoryId.HasValue)
@@ -80,7 +84,46 @@ public class PostRepository : IPostRepository
         // Apply filters
         if (!string.IsNullOrEmpty(filters.Search))
         {
-            query = query.Where(p => p.Title.Contains(filters.Search) || p.Content.Contains(filters.Search));
+            var searchLower = filters.Search.ToLower();
+            query = query.Where(p =>
+                p.Title.ToLower().Contains(searchLower) ||
+                p.Content.ToLower().Contains(searchLower) ||
+                p.Tags.Any(t => t.Name.ToLower().Contains(searchLower)));
+        }
+
+        if (!string.IsNullOrEmpty(filters.CategorySlug))
+        {
+            query = query.Where(p => p.Category.Name.Replace(" ", "-").ToLower() == filters.CategorySlug.ToLower());
+        }
+
+        var total = await query.CountAsync();
+
+        var posts = await query
+            .OrderByDescending(p => p.PublishedAt ?? p.CreatedAt)
+            .Skip((filters.Page - 1) * filters.PageSize)
+            .Take(filters.PageSize)
+            .ToListAsync();
+
+        return (posts, total);
+    }
+
+    public async Task<(List<Post> posts, int total)> GetPublishedAsync(PostFiltersDTO filters)
+    {
+        var query = _context.Posts
+            .Include(p => p.User)
+            .Include(p => p.Category)
+            .Include(p => p.Tags)
+            .Where(p => p.Status == "Published")
+            .AsQueryable();
+
+        // Apply filters
+        if (!string.IsNullOrEmpty(filters.Search))
+        {
+            var searchLower = filters.Search.ToLower();
+            query = query.Where(p =>
+                p.Title.ToLower().Contains(searchLower) ||
+                p.Content.ToLower().Contains(searchLower) ||
+                p.Tags.Any(t => t.Name.ToLower().Contains(searchLower)));
         }
 
         if (!string.IsNullOrEmpty(filters.CategorySlug))
@@ -111,7 +154,11 @@ public class PostRepository : IPostRepository
         // Apply filters
         if (!string.IsNullOrEmpty(filters.Search))
         {
-            query = query.Where(p => p.Title.Contains(filters.Search) || p.Content.Contains(filters.Search));
+            var searchLower = filters.Search.ToLower();
+            query = query.Where(p =>
+                p.Title.ToLower().Contains(searchLower) ||
+                p.Content.ToLower().Contains(searchLower) ||
+                p.Tags.Any(t => t.Name.ToLower().Contains(searchLower)));
         }
 
         if (!string.IsNullOrEmpty(filters.Status))
