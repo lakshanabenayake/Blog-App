@@ -34,6 +34,16 @@ export function BlogHeader() {
           >
             Home
           </Link>
+        
+          <Link
+            href="/blog"
+            className={`text-sm font-medium transition-colors hover:text-primary ${
+              pathname === "/blog" ? "text-primary" : "text-muted-foreground"
+            }`}
+          >
+            Blog
+          </Link>
+
           {isAuthenticated ? (
             <>
               {user?.role === "admin" ? (

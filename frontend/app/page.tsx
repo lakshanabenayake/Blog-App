@@ -9,6 +9,8 @@ import { ArrowRight, BookOpen, Layers, Users, Pencil } from "lucide-react"
 import { postsService } from "@/lib/api"
 import type { Post } from "@/lib/types"
 import { format } from "date-fns"
+import { BlogHeader } from "@/components/blog/header"
+import { BlogFooter } from "@/components/blog/footer"
 
 export default function LandingPage() {
   const [recentPosts, setRecentPosts] = useState<Post[]>([])
@@ -32,35 +34,7 @@ export default function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <BookOpen className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-semibold">BlogSpace</span>
-          </Link>
-          <nav className="flex items-center gap-6">
-            <Link
-              href="/blog"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Blog
-            </Link>
-            <Link href="/auth/login">
-              <Button variant="outline" size="sm">
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/auth/sign-up">
-              <Button size="sm">
-                Get Started
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </nav>
-        </div>
-      </header>
+         <BlogHeader />
 
       {/* Hero Section */}
       <section className="relative flex flex-1 items-center justify-center overflow-hidden bg-background px-4 py-24 lg:py-32">
@@ -254,30 +228,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border px-4 py-12">
-        <div className="container mx-auto max-w-7xl">
-          <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <BookOpen className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-semibold">BlogSpace</span>
-            </div>
-            <nav className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-              <Link href="/blog" className="transition-colors hover:text-foreground">
-                Blog
-              </Link>
-              <Link href="/auth/login" className="transition-colors hover:text-foreground">
-                Sign In
-              </Link>
-              <Link href="/auth/sign-up" className="transition-colors hover:text-foreground">
-                Sign Up
-              </Link>
-            </nav>
-            <p className="text-sm text-muted-foreground">© 2025 BlogSpace. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <BlogFooter />
     </div>
   )
 }
