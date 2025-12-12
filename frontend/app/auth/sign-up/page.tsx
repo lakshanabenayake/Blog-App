@@ -41,7 +41,7 @@ export default function SignUpPage() {
     try {
       const response = await register(name, email, password)
       // Redirect based on user role
-      if (response?.role === "admin") {
+      if (response?.role === "Admin") {
         router.push("/admin")
       } else {
         router.push("/blog")

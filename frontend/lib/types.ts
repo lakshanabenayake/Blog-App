@@ -23,6 +23,7 @@ export interface Post {
   createdAt: string
   updatedAt: string
   category?: Category
+  user?: User
 }
 
 export interface User {
@@ -30,6 +31,7 @@ export interface User {
   email: string
   name: string
   role: "Admin" | "user"
+  profilePictureUrl?: string | null
 }
 
 export interface AuthResponse {
