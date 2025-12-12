@@ -88,7 +88,7 @@ public class PostService
             CategoryId = dto.CategoryId,
             UserId = userId,
             FeaturedImageUrl = dto.FeaturedImageUrl,
-            Status = "Published",
+            Status = "published",
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             PublishedAt = DateTime.UtcNow

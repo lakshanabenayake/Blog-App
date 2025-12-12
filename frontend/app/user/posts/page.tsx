@@ -147,7 +147,7 @@ export default function UserPostsPage() {
             <Card key={post.id}>
               <CardHeader>
                 <div className="mb-2 flex items-center justify-between">
-                  <Badge variant={post.status === "Published" ? "default" : "secondary"}>
+                  <Badge variant={post.status === "published" ? "default" : "secondary"}>
                     {post.status}
                   </Badge>
                   {post.category && (
@@ -174,7 +174,7 @@ export default function UserPostsPage() {
                       Edit
                     </Link>
                   </Button>
-                  {post.status === "Published" && (
+                  {post.status === "published" && (
                     <Button variant="outline" size="sm" asChild>
                       <Link href={`/blog/${post.slug}`}>
                         <Eye className="mr-2 h-3 w-3" />
