@@ -29,7 +29,7 @@ public class ImageService
             var uploadParams = new ImageUploadParams
             {
                 File = new FileDescription(file.FileName, stream),
-                Folder = "rs-course"
+                Folder = "blog-app/posts"
             };
             uploadResult = await _cloudinary.UploadAsync(uploadParams);
         }

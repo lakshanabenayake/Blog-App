@@ -14,7 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.Configure<backend.Config.CloudinarySettings>(
-    builder.Configuration.GetSection("CloudinarySettings"));    
+    builder.Configuration.GetSection("CloudinarySettings"));
 
 // Add Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -23,6 +23,7 @@ builder.Services.AddScoped<IPostRepository, PostRepository>();
 // Add Services
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<API.Services.ImageService>();
 
 // Add Authentication
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key missing");

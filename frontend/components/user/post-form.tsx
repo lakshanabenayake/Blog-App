@@ -1,12 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Loader2 } from "lucide-react"
+import { ArrowLeft, Loader2, Upload, X, Image as ImageIcon } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { useAuth } from "@/contexts/auth-context"
 import { postsService } from "@/lib/api/posts-service"
 import { categoriesService } from "@/lib/api/categories-service"
+import { imageService } from "@/lib/api/image-service"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -30,8 +32,12 @@ export default function PostForm({ post, isEdit = false }: PostFormProps) {
   const router = useRouter()
   const { isAuthenticated, isLoading: authLoading } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [categories, setCategories] = useState<Category[]>([])
+  const [imagePreview, setImagePreview] = useState<string | null>(post?.featuredImage || null)
+  const [uploadedPublicId, setUploadedPublicId] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [formData, setFormData] = useState({
     title: post?.title || "",
@@ -60,6 +66,46 @@ export default function PostForm({ post, isEdit = false }: PostFormProps) {
     }
     fetchCategories()
   }, [])
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file')
+      return
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size must be less than 5MB')
+      return
+    }
+
+    setIsUploading(true)
+    setError(null)
+
+    try {
+      const result = await imageService.upload(file)
+      setFormData({ ...formData, featuredImageUrl: result.url })
+      setImagePreview(result.url)
+      setUploadedPublicId(result.publicId)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to upload image')
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  const handleRemoveImage = () => {
+    setFormData({ ...formData, featuredImageUrl: '' })
+    setImagePreview(null)
+    setUploadedPublicId(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -202,14 +248,87 @@ export default function PostForm({ post, isEdit = false }: PostFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="image">Featured Image URL</Label>
-              <Input
-                id="image"
-                type="url"
-                placeholder="https://example.com/image.jpg"
-                value={formData.featuredImageUrl}
-                onChange={(e) => setFormData({ ...formData, featuredImageUrl: e.target.value })}
-              />
+              <Label>Featured Image</Label>
+              
+              {imagePreview ? (
+                <div className="relative">
+                  <div className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted">
+                    <Image
+                      src={imagePreview}
+                      alt="Preview"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    className="absolute right-2 top-2"
+                    onClick={handleRemoveImage}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isUploading}
+                      className="w-full"
+                    >
+                      {isUploading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="mr-2 h-4 w-4" />
+                          Upload Image
+                        </>
+                      )}
+                    </Button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                  </div>
+                  
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-background px-2 text-muted-foreground">Or</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="imageUrl">Image URL</Label>
+                    <Input
+                      id="imageUrl"
+                      type="url"
+                      placeholder="https://example.com/image.jpg"
+                      value={formData.featuredImageUrl}
+                      onChange={(e) => {
+                        setFormData({ ...formData, featuredImageUrl: e.target.value })
+                        setImagePreview(e.target.value)
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              <p className="text-xs text-muted-foreground">
+                Upload an image or paste an image URL (max 5MB, JPG/PNG/GIF/WebP)
+              </p>
             </div>
 
             {error && (
