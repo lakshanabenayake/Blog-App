@@ -67,7 +67,8 @@ public class AuthService : IauthService
             Id = user.Id,
             Username = user.Username,
             Email = user.Email,
-            Role = user.Role
+            Role = user.Role,
+            ProfilePictureUrl = user.ProfilePictureUrl
         };
     }
 
@@ -85,7 +86,8 @@ public class AuthService : IauthService
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
-                Role = user.Role
+                Role = user.Role,
+                ProfilePictureUrl = user.ProfilePictureUrl
             }
         };
     }
@@ -116,5 +118,28 @@ public class AuthService : IauthService
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public async Task<UserDTO?> UpdateProfileAsync(Guid userId, UpdateProfileDTO dto)
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null) return null;
+
+        if (!string.IsNullOrEmpty(dto.Username))
+            user.Username = dto.Username;
+
+        if (dto.ProfilePictureUrl != null)
+            user.ProfilePictureUrl = dto.ProfilePictureUrl;
+
+        await _userRepository.UpdateAsync(user);
+
+        return new UserDTO
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            Role = user.Role,
+            ProfilePictureUrl = user.ProfilePictureUrl
+        };
     }
 }

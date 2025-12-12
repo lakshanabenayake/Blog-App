@@ -63,4 +63,22 @@ public class AuthController : ControllerBase
     {
         return Ok(new { message = "Logged out successfully" });
     }
+
+    [HttpPut("profile")]
+    [Authorize]
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDTO dto)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (userIdClaim == null)
+            return Unauthorized();
+
+        var userId = Guid.Parse(userIdClaim);
+        var result = await _authService.UpdateProfileAsync(userId, dto);
+
+        if (result == null)
+            return NotFound(new { message = "User not found" });
+
+        return Ok(result);
+    }
 }
