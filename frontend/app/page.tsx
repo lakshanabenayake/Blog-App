@@ -33,8 +33,6 @@ export default function LandingPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Header */}
-         <BlogHeader />
 
       {/* Hero Section */}
       <section className="relative flex flex-1 items-center justify-center overflow-hidden bg-background px-4 py-24 lg:py-32">
