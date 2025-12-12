@@ -57,7 +57,7 @@ export default function AdminLayout({
     <div className="min-h-screen bg-muted/30">
       <AdminSidebar />
       <div className="ml-64">
-        <AdminHeader title="Admin Dashboard" email={user?.email} />
+        {/* <AdminHeader title="Admin Dashboard" email={user?.email} /> */}
         <main className="p-6">{children}</main>
       </div>
     </div>

@@ -10,7 +10,7 @@ const navItems = [
   { href: "/admin", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/admin/posts", icon: FileText, label: "Posts" },
   { href: "/admin/categories", icon: FolderOpen, label: "Categories" },
-  { href: "/user/profile", icon: User, label: "Profile" },
+  // { href: "/user/profile", icon: User, label: "Profile" },
 ]
 
 export function AdminSidebar() {
