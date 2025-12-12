@@ -1,6 +1,7 @@
 using backend.DTOs;
 using backend.Interfaces;
 using backend.models;
+using backend.Utilities;
 
 namespace backend.services;
 
@@ -23,7 +24,7 @@ public class PostService
             Total = total,
             Page = filters.Page,
             PageSize = filters.PageSize,
-            TotalPages = (int)Math.Ceiling(total  / (double)filters.PageSize)
+            TotalPages = (int)Math.Ceiling(total / (double)filters.PageSize)
         };
     }
 
@@ -61,10 +62,15 @@ public class PostService
 
     public async Task<PostResponseDTO> CreatePostAsync(CreatePostDTO dto, Guid userId)
     {
+        // Generate unique slug
+        var baseSlug = SlugGenerator.GenerateSlug(dto.Title);
+        var slug = await GenerateUniqueSlugAsync(baseSlug);
+
         var post = new Post
         {
             Id = Guid.NewGuid(),
             Title = dto.Title,
+            Slug = slug,
             Content = dto.Content,
             CategoryId = dto.CategoryId,
             UserId = userId,
@@ -91,7 +97,14 @@ public class PostService
         var post = await _postRepository.GetByIdAsync(id);
         if (post == null) return null;
 
-        if (dto.Title != null) post.Title = dto.Title;
+        if (dto.Title != null)
+        {
+            post.Title = dto.Title;
+            // Regenerate slug if title changed
+            var baseSlug = SlugGenerator.GenerateSlug(dto.Title);
+            var slug = await GenerateUniqueSlugAsync(baseSlug, id);
+            post.Slug = slug;
+        }
         if (dto.Content != null) post.Content = dto.Content;
         if (dto.CategoryId.HasValue) post.CategoryId = dto.CategoryId.Value;
         if (dto.FeaturedImageUrl != null) post.FeaturedImageUrl = dto.FeaturedImageUrl;
@@ -138,13 +151,34 @@ public class PostService
         };
     }
 
+    private async Task<string> GenerateUniqueSlugAsync(string baseSlug, Guid? excludePostId = null)
+    {
+        var counter = 0;
+        var slug = baseSlug;
+
+        while (true)
+        {
+            var existingPost = await _postRepository.GetBySlugAsync(slug);
+
+            // If no post exists with this slug, or it's the same post we're updating
+            if (existingPost == null || (excludePostId.HasValue && existingPost.Id == excludePostId.Value))
+            {
+                return slug;
+            }
+
+            // Generate new slug with counter
+            counter++;
+            slug = SlugGenerator.GenerateUniqueSlug(baseSlug, counter);
+        }
+    }
+
     private PostResponseDTO MapToResponseDTO(Post post)
     {
         return new PostResponseDTO
         {
             Id = post.Id,
             Title = post.Title,
-            Slug = post.Title.Replace(" ", "-").ToLower(),
+            Slug = post.Slug,
             Content = post.Content,
             Excerpt = post.Content.Length > 200 ? post.Content.Substring(0, 200) + "..." : post.Content,
             FeaturedImage = post.FeaturedImageUrl,

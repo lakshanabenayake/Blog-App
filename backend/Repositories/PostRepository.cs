@@ -26,12 +26,11 @@ public class PostRepository : IPostRepository
 
     public async Task<Post?> GetBySlugAsync(string slug)
     {
-        // For now, we'll use title as slug (you can add a Slug property to Post model later)
         return await _context.Posts
             .Include(p => p.User)
             .Include(p => p.Category)
             .Include(p => p.Tags)
-            .FirstOrDefaultAsync(p => p.Title.Replace(" ", "-").ToLower() == slug.ToLower());
+            .FirstOrDefaultAsync(p => p.Slug == slug.ToLower());
     }
 
     public async Task<(List<Post> posts, int total)> GetAllAsync(PostFiltersDTO filters)
