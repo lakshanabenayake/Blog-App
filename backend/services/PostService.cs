@@ -1,7 +1,9 @@
+using backend.data;
 using backend.DTOs;
 using backend.Interfaces;
 using backend.models;
 using backend.Utilities;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.services;
 
@@ -9,11 +11,13 @@ public class PostService
 {
     private readonly IPostRepository _postRepository;
     private readonly IUserRepository _userRepository;
+    private readonly AppDbContext _context;
 
-    public PostService(IPostRepository postRepository, IUserRepository userRepository)
+    public PostService(IPostRepository postRepository, IUserRepository userRepository, AppDbContext context)
     {
         _postRepository = postRepository;
         _userRepository = userRepository;
+        _context = context;
     }
 
     public async Task<PaginatedResponseDTO<PostResponseDTO>> GetAllPostsAsync(PostFiltersDTO filters)
@@ -93,8 +97,7 @@ public class PostService
         // Handle tags if provided
         if (dto.Tags != null && dto.Tags.Any())
         {
-            // This is simplified - you might want to create/fetch tags from DB
-            post.Tags = dto.Tags.Select(t => new Tags { Name = t }).ToList();
+            post.Tags = await GetOrCreateTagsAsync(dto.Tags);
         }
 
         await _postRepository.AddAsync(post);
@@ -130,7 +133,7 @@ public class PostService
         // Handle tags update
         if (dto.Tags != null)
         {
-            post.Tags = dto.Tags.Select(t => new Tags { Name = t }).ToList();
+            post.Tags = await GetOrCreateTagsAsync(dto.Tags);
         }
 
         await _postRepository.UpdateAsync(post);
@@ -179,6 +182,34 @@ public class PostService
             counter++;
             slug = SlugGenerator.GenerateUniqueSlug(baseSlug, counter);
         }
+    }
+
+    private async Task<List<Tags>> GetOrCreateTagsAsync(List<string> tagNames)
+    {
+        var tags = new List<Tags>();
+
+        foreach (var tagName in tagNames)
+        {
+            // Try to find existing tag
+            var existingTag = await _context.Tags
+                .FirstOrDefaultAsync(t => t.Name.ToLower() == tagName.ToLower());
+
+            if (existingTag != null)
+            {
+                // Use existing tag
+                tags.Add(existingTag);
+            }
+            else
+            {
+                // Create new tag
+                var newTag = new Tags { Name = tagName };
+                _context.Tags.Add(newTag);
+                await _context.SaveChangesAsync();
+                tags.Add(newTag);
+            }
+        }
+
+        return tags;
     }
 
     private PostResponseDTO MapToResponseDTO(Post post)
