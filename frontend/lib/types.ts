@@ -53,4 +53,5 @@ export interface DashboardStats {
   publishedPosts: number
   draftPosts: number
   totalCategories: number
+  totalUsers: number
 }
