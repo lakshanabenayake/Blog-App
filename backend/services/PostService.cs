@@ -88,10 +88,10 @@ public class PostService
             CategoryId = dto.CategoryId,
             UserId = userId,
             FeaturedImageUrl = dto.FeaturedImageUrl,
-            Status = "published",
+            Status = dto.Status ?? "Draft",
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            PublishedAt = DateTime.UtcNow
+            PublishedAt = dto.Status?.ToLower() == "published" ? DateTime.UtcNow : null
         };
 
         // Handle tags if provided

@@ -78,7 +78,7 @@ public class PostRepository : IPostRepository
             .Include(p => p.User)
             .Include(p => p.Category)
             .Include(p => p.Tags)
-            .Where(p => p.Status == "Published")
+            .Where(p => p.Status.ToLower() == "published")
             .AsQueryable();
 
         // Apply filters

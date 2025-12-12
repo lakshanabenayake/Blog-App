@@ -67,6 +67,7 @@ function BlogContent() {
         }),
         categoriesService.getAll(),
       ])
+      console.log(postsResponse.data);
       setPosts(postsResponse.data)
       setCategories(categoriesData)
       setPagination({
