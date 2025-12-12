@@ -8,10 +8,12 @@ namespace backend.services;
 public class PostService
 {
     private readonly IPostRepository _postRepository;
+    private readonly IUserRepository _userRepository;
 
-    public PostService(IPostRepository postRepository)
+    public PostService(IPostRepository postRepository, IUserRepository userRepository)
     {
         _postRepository = postRepository;
+        _userRepository = userRepository;
     }
 
     public async Task<PaginatedResponseDTO<PostResponseDTO>> GetAllPostsAsync(PostFiltersDTO filters)
@@ -62,6 +64,13 @@ public class PostService
 
     public async Task<PostResponseDTO> CreatePostAsync(CreatePostDTO dto, Guid userId)
     {
+        // Verify user exists
+        var userExists = await _userRepository.GetByIdAsync(userId);
+        if (userExists == null)
+        {
+            throw new InvalidOperationException($"User with ID {userId} does not exist");
+        }
+
         // Generate unique slug
         var baseSlug = SlugGenerator.GenerateSlug(dto.Title);
         var slug = await GenerateUniqueSlugAsync(baseSlug);

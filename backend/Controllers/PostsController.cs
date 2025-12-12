@@ -53,13 +53,39 @@ public class PostsController : ControllerBase
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        if (userIdClaim == null)
-            return Unauthorized();
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized(new { message = "User ID not found in token" });
+        }
 
-        var userId = Guid.Parse(userIdClaim);
-        var post = await _postService.CreatePostAsync(dto, userId);
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            return BadRequest(new { message = "Invalid user ID format" });
+        }
 
-        return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
+        try
+        {
+            var post = await _postService.CreatePostAsync(dto, userId);
+            return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = "Failed to create post", error = ex.Message });
+        }
+    }
+
+    [HttpGet("posts/{id}")]
+    public async Task<IActionResult> GetPostById(string id)
+    {
+        if (!Guid.TryParse(id, out var postId))
+            return BadRequest(new { message = "Invalid post ID" });
+
+        var post = await _postService.GetPostByIdAsync(postId);
+
+        if (post == null)
+            return NotFound(new { message = "Post not found" });
+
+        return Ok(post);
     }
 
     [HttpPut("posts/{id}")]
@@ -103,7 +129,7 @@ public class PostsController : ControllerBase
 
     [HttpGet("admin/posts/{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> GetPostById(string id)
+    public async Task<IActionResult> GetAdminPostById(string id)
     {
         if (!Guid.TryParse(id, out var postId))
             return BadRequest(new { message = "Invalid post ID" });
