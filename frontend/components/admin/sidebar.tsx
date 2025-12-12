@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutDashboard, FileText, FolderOpen, LogOut, PenSquare } from "lucide-react"
+import { LayoutDashboard, FileText, FolderOpen, LogOut, PenSquare, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/contexts/auth-context"
 
@@ -10,6 +10,7 @@ const navItems = [
   { href: "/admin", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/admin/posts", icon: FileText, label: "Posts" },
   { href: "/admin/categories", icon: FolderOpen, label: "Categories" },
+  { href: "/user/profile", icon: User, label: "Profile" },
 ]
 
 export function AdminSidebar() {

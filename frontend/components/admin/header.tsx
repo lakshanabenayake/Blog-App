@@ -1,11 +1,12 @@
 "use client"
 
-import { User, LogOut } from "lucide-react"
+import { User, LogOut, Settings } from "lucide-react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 
 interface AdminHeaderProps {
   title: string
@@ -13,7 +14,7 @@ interface AdminHeaderProps {
 }
 
 export function AdminHeader({ title, email }: AdminHeaderProps) {
-  const { logout } = useAuth()
+  const { logout, user } = useAuth()
   const router = useRouter()
 
   const handleLogout = async () => {
@@ -30,6 +31,7 @@ export function AdminHeader({ title, email }: AdminHeaderProps) {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
               <Avatar className="h-8 w-8">
+                <AvatarImage src={user?.profilePictureUrl || undefined} alt={user?.name} />
                 <AvatarFallback>
                   <User className="h-4 w-4" />
                 </AvatarFallback>
@@ -37,6 +39,13 @@ export function AdminHeader({ title, email }: AdminHeaderProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownMenuItem asChild>
+              <Link href="/user/profile">
+                <Settings className="mr-2 h-4 w-4" />
+                Profile Settings
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout} className="text-destructive">
               <LogOut className="mr-2 h-4 w-4" />
               Sign out
