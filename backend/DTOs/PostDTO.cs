@@ -35,6 +35,7 @@ public class PostResponseDTO
     public List<string> Tags { get; set; } = new();
     public string Status { get; set; } = null!;
     public Guid UserId { get; set; }
+    public UserDTO? User { get; set; }
     public DateTime? PublishedAt { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

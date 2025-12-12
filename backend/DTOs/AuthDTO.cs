@@ -26,4 +26,11 @@ public class UserDTO
     public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string Role { get; set; } = null!;
+    public string? ProfilePictureUrl { get; set; }
+}
+
+public class UpdateProfileDTO
+{
+    public string? Username { get; set; }
+    public string? ProfilePictureUrl { get; set; }
 }
