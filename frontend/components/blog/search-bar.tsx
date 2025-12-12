@@ -22,17 +22,19 @@ export function SearchBar() {
     const params = new URLSearchParams(searchParams.toString())
     if (query.trim()) {
       params.set("q", query.trim())
+      params.delete("page") // Reset to page 1 when searching
     } else {
       params.delete("q")
     }
-    router.push(`/?${params.toString()}`)
+    router.push(`/blog?${params.toString()}`)
   }
 
   const clearSearch = () => {
     setQuery("")
     const params = new URLSearchParams(searchParams.toString())
     params.delete("q")
-    router.push(`/?${params.toString()}`)
+    params.delete("page") // Reset to page 1 when clearing
+    router.push(`/blog?${params.toString()}`)
   }
 
   return (

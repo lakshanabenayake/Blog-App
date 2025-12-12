@@ -17,10 +17,11 @@ export function CategoryFilter({ categories }: CategoryFilterProps) {
     const params = new URLSearchParams(searchParams.toString())
     if (slug) {
       params.set("category", slug)
+      params.delete("page") // Reset to page 1 when filtering
     } else {
       params.delete("category")
     }
-    router.push(`/?${params.toString()}`)
+    router.push(`/blog?${params.toString()}`)
   }
 
   return (
