@@ -53,6 +53,7 @@ public class AppDbContext : DbContext
             entity.Property(p => p.Status).HasDefaultValue("Draft");
             entity.HasIndex(p => p.Status);
             entity.HasIndex(p => p.CreatedAt);
+            entity.HasIndex(p => p.Slug).IsUnique();
         });
 
         // Configure Category entity
