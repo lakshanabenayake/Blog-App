@@ -29,7 +29,16 @@ api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
-      if (typeof window !== "undefined") {
+      const originalRequest = error.config
+      
+      // Only redirect if it's not a login/register attempt and user was previously authenticated
+      if (
+        typeof window !== "undefined" &&
+        originalRequest?.url &&
+        !originalRequest.url.includes("/auth/login") &&
+        !originalRequest.url.includes("/auth/register") &&
+        localStorage.getItem("auth_token")
+      ) {
         localStorage.removeItem("auth_token")
         localStorage.removeItem("refresh_token")
         localStorage.removeItem("user")

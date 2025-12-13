@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { PenSquare, Loader2 } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { PenSquare, Loader2, AlertCircle } from "lucide-react"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -21,8 +22,23 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    e.stopPropagation()
+    
     setIsLoading(true)
     setError(null)
+
+    // Basic validation
+    if (!email || !password) {
+      setError("Please enter both email and password")
+      setIsLoading(false)
+      return
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setError("Please enter a valid email address")
+      setIsLoading(false)
+      return
+    }
 
     try {
       const response = await login(email, password)
@@ -34,9 +50,30 @@ export default function LoginPage() {
         router.push("/blog")
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Invalid credentials")
-    } finally {
+      // Prevent any navigation on error
+      console.error("Login error:", err)
+      
+      // Handle different error types
+      if (err instanceof Error) {
+        if (err.message.includes("401") || err.message.toLowerCase().includes("unauthorized")) {
+          setError("Invalid email or password. Please try again.")
+        } else if (err.message.toLowerCase().includes("network")) {
+          setError("Network error. Please check your connection.")
+        } else {
+          setError(err.message || "Login failed. Please try again.")
+        }
+      } else {
+        setError("An unexpected error occurred. Please try again.")
+      }
+      
+      // Keep isLoading false so user can retry
       setIsLoading(false)
+      return 
+    } finally {
+      // This will only run after successful login or after error handling
+      if (!error) {
+        setIsLoading(false)
+      }
     }
   }
 
@@ -56,7 +93,7 @@ export default function LoginPage() {
             <CardDescription>Sign in to access BlogSpace</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-4" noValidate>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -65,7 +102,12 @@ export default function LoginPage() {
                   placeholder="user@example.com"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    setError(null) // Clear error when user types
+                  }}
+                  className={error ? "border-destructive focus-visible:ring-destructive" : ""}
+                  disabled={isLoading}
                 />
               </div>
               <div className="space-y-2">
@@ -75,11 +117,21 @@ export default function LoginPage() {
                   type="password"
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    setError(null) // Clear error when user types
+                  }}
+                  className={error ? "border-destructive focus-visible:ring-destructive" : ""}
+                  disabled={isLoading}
                 />
               </div>
 
-              {error && <p className="text-sm text-destructive">{error}</p>}
+              {error && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
 
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
