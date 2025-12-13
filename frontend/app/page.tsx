@@ -37,36 +37,44 @@ export default function LandingPage() {
       {/* <PenSquare className="absolute left-4 top-4 h-12 w-12 text-primary" /> */}
       {/* Hero Section */}
       <section className="relative flex flex-1 items-center justify-center overflow-hidden bg-background px-4 py-24 lg:py-32">
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] " />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
         <div className="container mx-auto max-w-5xl text-center">
-          <div className="flex items-center justify-center gap-3 font-sans text-5xl font-bold leading-tight tracking-tight lg:text-7xl mb-7 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 w-fit px-8 py-4 rounded-2xl mx-auto border-1 border-black shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-            <PenSquare className="text-primary-500 drop-shadow-md w-12 h-12 lg:w-16 lg:h-16" strokeWidth={2.5} />
-            <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 bg-clip-text text-primary drop-shadow-sm">
-              BlogSpace
-            </span>
+          <div className="mb-12 grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
+            <div className="flex items-center justify-center">
+              <div className="relative inline-flex items-center justify-center px-8 py-6 backdrop-blur-sm lg:px-12 lg:py-8">
+                <img
+                  src="/hero-removebg-preview.png"
+                  alt="BlogSpace Logo"
+                  className="h-60 w-auto"
+                />
+              </div>
+            </div>
+
+            <h1 className="text-balance font-sans text-5xl font-bold leading-tight tracking-tight lg:text-left lg:text-7xl">
+              Your Stories,
+              <br />
+              <span className="text-muted-foreground">Your Voice</span>
+            </h1>
           </div>
 
-          <h1 className="mt-6 mb-6 text-balance font-sans text-5xl font-bold leading-tight tracking-tight lg:text-7xl">
-            Your Stories,
-            <br />
-            <span className="text-muted-foreground">Your Voice</span>
-          </h1>
-          <p className="mx-auto mb-10 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground lg:text-xl">
-            Discover compelling stories, insights, and ideas from writers around the world. A modern blog platform with
-            an easy-to-use CMS for creators.
-          </p>
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link href="/blog">
-              <Button size="lg" className="w-full sm:w-auto">
-                Explore Blog
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link href= {isAuthenticated ? "/user/posts" : "/auth/sign-up"}>
-              <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent">
-                Start Writing
-              </Button>
-            </Link>
+          <div>
+            <p className="mx-auto mb-10 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground lg:text-xl">
+              Discover compelling stories, insights, and ideas from writers around the world. A modern blog platform with
+              an easy-to-use CMS for creators.
+            </p>
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Link href="/blog">
+                <Button size="lg" className="w-full sm:w-auto">
+                  Explore Blog
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href={isAuthenticated ? "/user/posts" : "/auth/sign-up"}>
+                <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent">
+                  Start Writing
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
