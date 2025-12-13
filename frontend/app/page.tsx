@@ -62,7 +62,7 @@ export default function LandingPage() {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-            <Link href="/auth/sign-up">
+            <Link href= {isAuthenticated ? "/user/posts" : "/auth/sign-up"}>
               <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent">
                 Start Writing
               </Button>
