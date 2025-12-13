@@ -53,7 +53,7 @@ export default function LoginPage() {
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">Welcome back</CardTitle>
-            <CardDescription>Sign in to access the admin panel</CardDescription>
+            <CardDescription>Sign in to access BlogSpace</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
@@ -62,7 +62,7 @@ export default function LoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@example.com"
+                  placeholder="user@example.com"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
