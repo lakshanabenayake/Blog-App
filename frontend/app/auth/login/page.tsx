@@ -102,8 +102,11 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="mb-8 flex justify-center">
           <Link href="/" className="flex items-center gap-2">
-            <PenSquare className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-foreground">BlogSpace</span>
+            <img
+            src="/logo.png"
+            alt="BlogSpace Logo"
+            className="h-8 w-auto"
+          /> 
           </Link>
         </div>
 
