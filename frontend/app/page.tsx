@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -9,12 +9,13 @@ import { ArrowRight, BookOpen, Layers, Users, Pencil, PenSquare } from "lucide-r
 import { postsService } from "@/lib/api"
 import type { Post } from "@/lib/types"
 import { format } from "date-fns"
-import { BlogHeader } from "@/components/blog/header"
 import { BlogFooter } from "@/components/blog/footer"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function LandingPage() {
   const [recentPosts, setRecentPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const loadRecentPosts = async () => {
@@ -214,17 +215,18 @@ export default function LandingPage() {
             world.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link href="/auth/sign-up">
+            {!isAuthenticated && <Link href="/auth/sign-up">
               <Button size="lg" className="w-full sm:w-auto">
                 Get Started Free
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-            </Link>
+            </Link>}
+
             <Link href="/blog">
               <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent">
                 Explore Content
               </Button>
-            </Link>
+            </Link> 
           </div>
         </div>
       </section>
