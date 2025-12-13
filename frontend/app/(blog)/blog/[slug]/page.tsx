@@ -111,7 +111,7 @@ export default function PostPage({ params }: PostPageProps) {
       </header>
 
       {post.featuredImage && (
-        <div className="relative mb-8 aspect-video overflow-hidden rounded-lg">
+        <div className="relative mb-8 aspect-video overflow-hidden rounded-lg max-w-8xl">
           <Image
             src={post.featuredImage || "/placeholder.svg"}
             alt={post.title}
@@ -124,7 +124,7 @@ export default function PostPage({ params }: PostPageProps) {
 
       <AuthorBox author={post.user} publishedAt={post.publishedAt} />
 
-      <div className="prose prose-gray mx-auto max-w-3xl dark:prose-invert">
+      <div className="prose prose-gray  max-w-3xl dark:prose-invert">
         {post.content.split("\n").map((paragraph, index) => (
           <p key={index}>{paragraph}</p>
         ))}
