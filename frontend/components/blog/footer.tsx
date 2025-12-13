@@ -11,7 +11,7 @@ export function BlogFooter() {
             <span className="font-semibold text-foreground">BlogSpace</span> */}
 
 <img
-            src="/logo.svg"
+            src="/logo.png"
             alt="BlogSpace Logo"
             className="h-8 w-auto"
           />          </Link>

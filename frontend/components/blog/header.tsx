@@ -62,7 +62,7 @@ export function BlogHeader() {
           {/* <PenSquare className="h-6 w-6 text-primary" />
           <span className="text-xl font-bold text-foreground">BlogSpace</span> */}
           <img
-            src="/logo.svg"
+            src="/logo.png"
             alt="BlogSpace Logo"
             className="h-8 w-auto"
           />
