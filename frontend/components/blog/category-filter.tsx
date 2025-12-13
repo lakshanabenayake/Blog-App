@@ -34,7 +34,7 @@ export function CategoryFilter({ categories }: CategoryFilterProps) {
           key={category.id}
           variant={activeCategory === category.slug ? "default" : "outline"}
           size="sm"
-          onClick={() => handleCategoryClick(category.slug)}
+          onClick={() => handleCategoryClick(category.name)}
         >
           {category.name}
         </Button>
