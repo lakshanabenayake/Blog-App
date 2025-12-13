@@ -17,11 +17,12 @@ WORKDIR /app
 # Copy the published app from build stage
 COPY --from=build /app/publish .
 
-# Expose port 8080 (or whatever port your app uses)
-EXPOSE 8080
+# Expose port 5000 for Dokploy
+EXPOSE 5000
 
 # Set environment variables
-ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_URLS=http://+:5000
+ENV ASPNETCORE_ENVIRONMENT=Production
 
 # Run the application
 ENTRYPOINT ["dotnet", "backend.dll"]
