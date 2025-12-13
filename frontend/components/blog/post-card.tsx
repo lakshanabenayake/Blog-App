@@ -58,7 +58,7 @@ export function PostCard({ post }: PostCardProps) {
                       .slice(0, 2) || "U"}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-xs text-muted-foreground">{post.user.name}</span>
+                <span className="text-xs text-muted-foreground">{post.user.name ? post.user.name : "Anonymous User"}</span>
               </>
             )}
           </div>

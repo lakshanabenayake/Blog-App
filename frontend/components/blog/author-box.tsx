@@ -39,7 +39,7 @@ export function AuthorBox({ author, publishedAt }: AuthorBoxProps) {
         </Avatar>
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Written by</span>
+            <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Written by {author.name ? author.name : "an Anonymous User"}</span>
           </div>
           <h3 className="text-lg font-semibold text-foreground">{author.name}</h3>
           {formattedDate && <p className="text-sm text-muted-foreground">Published on {formattedDate}</p>}
