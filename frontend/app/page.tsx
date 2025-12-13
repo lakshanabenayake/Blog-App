@@ -41,11 +41,11 @@ export default function LandingPage() {
         <div className="container mx-auto max-w-5xl text-center">
           <div className="mb-12 grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
             <div className="flex items-center justify-center">
-              <div className="relative inline-flex items-center justify-center px-8 py-6 backdrop-blur-sm lg:px-12 lg:py-8">
+              <div className="relative inline-flex items-center justify-center px-4 py-4 backdrop-blur-sm sm:px-8 sm:py-6 lg:px-12 lg:py-8">
                 <img
                   src="/hero-removebg-preview.png"
                   alt="BlogSpace Logo"
-                  className="h-60 w-auto"
+                  className="h-32 w-auto max-w-full object-contain sm:h-40 md:h-48 lg:h-60"
                 />
               </div>
             </div>
