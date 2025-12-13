@@ -2,10 +2,11 @@ using backend.Config;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Options;
+using backend.Interfaces;
 
 namespace backend.services;
 
-public class ImageService
+public class ImageService : IImageService
 {
     private readonly Cloudinary _cloudinary;
     public ImageService(IOptions<CloudinarySettings> config)
