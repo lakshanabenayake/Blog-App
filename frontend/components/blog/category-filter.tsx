@@ -26,15 +26,21 @@ export function CategoryFilter({ categories }: CategoryFilterProps) {
 
   return (
     <div className="flex flex-wrap gap-2">
-      <Button variant={!activeCategory ? "default" : "outline"} size="sm" onClick={() => handleCategoryClick(null)}>
+      <Button 
+        variant={!activeCategory ? "default" : "outline"} 
+        size="sm" 
+        onClick={() => handleCategoryClick(null)}
+        className={!activeCategory ? "bg-primary text-primary-foreground hover:bg-primary/90" : "hover:bg-accent"}
+      >
         All
       </Button>
       {categories.map((category) => (
         <Button
           key={category.id}
-          variant={activeCategory === category.slug ? "default" : "outline"}
+          variant={activeCategory === category.name ? "default" : "outline"}
           size="sm"
           onClick={() => handleCategoryClick(category.name)}
+          className={activeCategory === category.name ? "bg-primary text-primary-foreground hover:bg-primary/90" : "hover:bg-accent"}
         >
           {category.name}
         </Button>
