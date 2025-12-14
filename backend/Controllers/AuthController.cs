@@ -1,5 +1,5 @@
 using backend.DTOs;
-using backend.services;
+using backend.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -10,9 +10,9 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly AuthService _authService;
+    private readonly IauthService _authService;
 
-    public AuthController(AuthService authService)
+    public AuthController(IauthService authService)
     {
         _authService = authService;
     }
