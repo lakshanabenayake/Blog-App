@@ -59,8 +59,7 @@ export default function LandingPage() {
 
           <div>
             <p className="mx-auto mb-10 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground lg:text-xl">
-              Discover compelling stories, insights, and ideas from writers around the world. A modern blog platform with
-              an easy-to-use CMS for creators.
+              Discover compelling stories, insights, and ideas from writers around the world.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link href="/blog">
