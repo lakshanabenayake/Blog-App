@@ -1,14 +1,10 @@
-"use client"
-
-import { useEffect, useState, use } from "react"
 import { notFound } from "next/navigation"
+import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, Calendar, Tag } from "lucide-react"
-import { postsService } from "@/lib/api/posts-service"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
 import { RelatedPosts } from "@/components/blog/related-posts"
 import { AuthorBox } from "@/components/blog/author-box"
 import type { Post } from "@/lib/types"
@@ -17,60 +13,79 @@ interface PostPageProps {
   params: Promise<{ slug: string }>
 }
 
-function PostSkeleton() {
-  return (
-    <article className="container mx-auto px-4 py-8">
-      <Skeleton className="mb-6 h-10 w-32" />
-      <header className="mb-8">
-        <Skeleton className="mb-4 h-6 w-24" />
-        <Skeleton className="mb-4 h-12 w-3/4" />
-        <Skeleton className="h-5 w-48" />
-      </header>
-      <Skeleton className="mb-8 aspect-video w-full rounded-lg" />
-      <div className="mx-auto max-w-3xl space-y-4">
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-3/4" />
-      </div>
-    </article>
-  )
-}
-
-export default function PostPage({ params }: PostPageProps) {
-  const { slug } = use(params)
-  const [post, setPost] = useState<Post | null>(null)
-  const [relatedPosts, setRelatedPosts] = useState<Post[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [notFoundError, setNotFoundError] = useState(false)
-
-  useEffect(() => {
-    async function fetchPost() {
-      setIsLoading(true)
-      try {
-        const postData = await postsService.getPostBySlug(slug)
-        setPost(postData)
-
-        if (postData.categoryId) {
-          const related = await postsService.getRelatedPosts(postData.id, postData.categoryId, 3)
-          setRelatedPosts(related)
-        }
-      } catch {
-        setNotFoundError(true)
-      } finally {
-        setIsLoading(false)
+// Server-side data fetching
+async function fetchPostData(slug: string) {
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.blogapp.lakshanabenayake.me/api"
+  
+  try {
+    const postRes = await fetch(`${API_BASE_URL}/posts/slug/${slug}`, {
+      next: { revalidate: 60 } // Revalidate every 60 seconds
+    })
+    
+    if (!postRes.ok) {
+      return null
+    }
+    
+    const post: Post = await postRes.json()
+    
+    // Fetch related posts if category exists
+    let relatedPosts: Post[] = []
+    if (post.categoryId) {
+      const relatedRes = await fetch(
+        `${API_BASE_URL}/posts/${post.id}/related?categoryId=${post.categoryId}&limit=3`,
+        { next: { revalidate: 60 } }
+      )
+      if (relatedRes.ok) {
+        relatedPosts = await relatedRes.json()
       }
     }
-
-    fetchPost()
-  }, [slug])
-
-  if (isLoading) {
-    return <PostSkeleton />
+    
+    return { post, relatedPosts }
+  } catch (error) {
+    console.error("Error fetching post:", error)
+    return null
   }
+}
 
-  if (notFoundError || !post) {
+// Generate metadata for SEO
+export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
+  const { slug } = await params
+  const data = await fetchPostData(slug)
+  
+  if (!data?.post) {
+    return {
+      title: "Post Not Found",
+    }
+  }
+  
+  const { post } = data
+  
+  return {
+    title: `${post.title} | BlogSpace`,
+    description: post.excerpt || post.content.substring(0, 160),
+    openGraph: {
+      title: post.title,
+      description: post.excerpt || post.content.substring(0, 160),
+      images: post.featuredImage ? [post.featuredImage] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt || post.content.substring(0, 160),
+      images: post.featuredImage ? [post.featuredImage] : [],
+    },
+  }
+}
+
+export default async function PostPage({ params }: PostPageProps) {
+  const { slug } = await params
+  const data = await fetchPostData(slug)
+
+  if (!data?.post) {
     notFound()
   }
+
+  const { post, relatedPosts } = data
 
   return (
     <article className="container mx-auto px-4 py-8">
