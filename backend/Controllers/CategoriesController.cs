@@ -1,8 +1,7 @@
-using backend.data;
+using backend.Interfaces;
 using backend.models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
@@ -10,28 +9,25 @@ namespace backend.Controllers;
 [Route("api/categories")]
 public class CategoriesController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly ICategoryService _categoryService;
 
-    public CategoriesController(AppDbContext context)
+    public CategoriesController(ICategoryService categoryService)
     {
-        _context = context;
+        _categoryService = categoryService;
     }
 
     // Public endpoints
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var categories = await _context.Categories
-            .OrderBy(c => c.Name)
-            .ToListAsync();
-
+        var categories = await _categoryService.GetAllCategoriesAsync();
         return Ok(categories);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var category = await _context.Categories.FindAsync(id);
+        var category = await _categoryService.GetCategoryByIdAsync(id);
 
         if (category == null)
             return NotFound(new { message = "Category not found" });
@@ -42,8 +38,7 @@ public class CategoriesController : ControllerBase
     [HttpGet("slug/{slug}")]
     public async Task<IActionResult> GetBySlug(string slug)
     {
-        var category = await _context.Categories
-            .FirstOrDefaultAsync(c => c.Name.Replace(" ", "-").ToLower() == slug.ToLower());
+        var category = await _categoryService.GetCategoryBySlugAsync(slug);
 
         if (category == null)
             return NotFound(new { message = "Category not found" });
@@ -59,11 +54,8 @@ public class CategoriesController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        category.CreatedAt = DateTime.UtcNow;
-        _context.Categories.Add(category);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
+        var createdCategory = await _categoryService.CreateCategoryAsync(category);
+        return CreatedAtAction(nameof(GetById), new { id = createdCategory.Id }, createdCategory);
     }
 
     [HttpPut("{id}")]
@@ -76,34 +68,28 @@ public class CategoriesController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var existingCategory = await _context.Categories.FindAsync(id);
-        if (existingCategory == null)
+        var updatedCategory = await _categoryService.UpdateCategoryAsync(id, category);
+
+        if (updatedCategory == null)
             return NotFound(new { message = "Category not found" });
 
-        existingCategory.Name = category.Name;
-        existingCategory.Description = category.Description;
-
-        await _context.SaveChangesAsync();
-
-        return Ok(existingCategory);
+        return Ok(updatedCategory);
     }
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
-        var category = await _context.Categories.FindAsync(id);
-        if (category == null)
-            return NotFound(new { message = "Category not found" });
+        var (success, message) = await _categoryService.DeleteCategoryAsync(id);
 
-        // Check if any posts are using this category
-        var postsCount = await _context.Posts.CountAsync(p => p.CategoryId == id);
-        if (postsCount > 0)
-            return BadRequest(new { message = $"Cannot delete category. {postsCount} posts are using it." });
+        if (!success)
+        {
+            if (message == "Category not found")
+                return NotFound(new { message });
 
-        _context.Categories.Remove(category);
-        await _context.SaveChangesAsync();
+            return BadRequest(new { message });
+        }
 
-        return Ok(new { message = "Category deleted successfully" });
+        return Ok(new { message });
     }
 }

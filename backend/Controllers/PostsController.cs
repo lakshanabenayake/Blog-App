@@ -1,5 +1,5 @@
 using backend.DTOs;
-using backend.services;
+using backend.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -10,9 +10,9 @@ namespace backend.Controllers;
 [Route("api")]
 public class PostsController : ControllerBase
 {
-    private readonly PostService _postService;
+    private readonly IPostService _postService;
 
-    public PostsController(PostService postService)
+    public PostsController(IPostService postService)
     {
         _postService = postService;
     }
