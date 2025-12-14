@@ -1,3 +1,4 @@
+using backend.Interfaces;
 using backend.services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +9,9 @@ namespace backend.Controllers;
 [Route("api/images")]
 public class ImageController : ControllerBase
 {
-    private readonly ImageService _imageService;
+    private readonly IImageService _imageService;
 
-    public ImageController(ImageService imageService)
+    public ImageController(IImageService imageService)
     {
         _imageService = imageService;
     }
