@@ -326,7 +326,7 @@ docker run -p 3000:3000 blogapp-frontend
    - Port: `5000`
 
 3. **Set Environment Variables** (without ASPNETCORE_URLS)
-4. **Configure Domain**: `api.blogapp.lakshanabenayake.me`
+4. **Configure Domain**: `api.blogapp.yourdomain.com`
 5. **Deploy**
 
 ### Frontend Deployment
@@ -400,30 +400,6 @@ BlogApp/
 └── README.md
 ```
 
-## 🧪 Testing
-
-### Backend
-
-```bash
-cd backend
-dotnet test
-```
-
-### Frontend
-
-```bash
-cd frontend
-pnpm test
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## 📝 License
 
 This project is licensed under the MIT License.
@@ -433,7 +409,6 @@ This project is licensed under the MIT License.
 **Lakshan Abenayake**
 
 - GitHub: [@lakshanabenayake](https://github.com/lakshanabenayake)
-- Website: https://lakshanabenayake.me
 
 ## 🙏 Acknowledgments
 
@@ -442,10 +417,6 @@ This project is licensed under the MIT License.
 - [Tailwind CSS](https://tailwindcss.com/) for utility-first styling
 - [Cloudinary](https://cloudinary.com/) for image management
 - [Dokploy](https://dokploy.com/) for easy deployment
-
-## 📞 Support
-
-For support, email contact@lakshanabenayake.me or open an issue on GitHub.
 
 ---
 
