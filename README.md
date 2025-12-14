@@ -2,6 +2,8 @@
 
 A modern, full-stack blogging platform with a public blog, content management system (CMS), and RESTful API built with ASP.NET Core and Next.js.
 
+## GitHub Repository : https://github.com/lakshanabenayake/Blog-App
+
 ## 🌐 Live Deployment
 
 - **Blog (Public)**: https://blogapp.lakshanabenayake.me
@@ -35,6 +37,57 @@ A modern, full-stack blogging platform with a public blog, content management sy
 - **Containerization**: Docker
 - **Deployment**: Dokploy, Digital Ocean
 - **Version Control**: Git/GitHub
+
+## 🏗️ Architecture
+
+This application follows a **3-tier architecture** pattern with clear separation of concerns:
+
+### Presentation Layer (Frontend)
+
+- **Next.js 15 with App Router** - Server-side rendering and client-side navigation
+- **React 19** - Component-based UI with hooks and context API
+- **TypeScript** - Type-safe development
+- **Tailwind CSS v4** - Utility-first styling
+- **shadcn/ui + Radix UI** - Accessible, reusable component library
+
+### Business Logic Layer (Backend)
+
+- **ASP.NET Core 9.0 Web API** - RESTful API endpoints
+- **Repository Pattern** - Data access abstraction
+- **Service Layer** - Business logic encapsulation
+- **Dependency Injection** - Loose coupling and testability
+- **JWT Authentication** - Stateless authorization with role-based access control
+
+### Data Layer
+
+- **PostgreSQL** - Relational database
+- **Entity Framework Core** - ORM with Code-First migrations
+- **Cloudinary** - Cloud-based image storage and CDN
+
+### Key Architectural Patterns
+
+- **Clean Architecture** - Separation of concerns with layered design
+- **Repository Pattern** - Abstraction over data access logic
+- **DTO Pattern** - Data transfer objects for API contracts
+- **Dependency Injection** - Inversion of control for flexible component composition
+- **JWT Bearer Authentication** - Secure, stateless user authentication
+- **RESTful API Design** - Standard HTTP methods and resource-based routing
+
+### Component Structure
+
+**Backend Layers:**
+
+```
+Controllers → Services → Repositories → DbContext → Database
+```
+
+**Frontend Structure:**
+
+```
+Pages → Components → API Client → Backend API
+         ↓
+      Contexts (Global State)
+```
 
 ## 📋 Features
 
@@ -419,5 +472,3 @@ This project is licensed under the MIT License.
 - [Dokploy](https://dokploy.com/) for easy deployment
 
 ---
-
-
