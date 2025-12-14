@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.services;
 
-public class PostService
+public class PostService : IPostService
 {
     private readonly IPostRepository _postRepository;
     private readonly IUserRepository _userRepository;
